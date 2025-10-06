@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUMPDAY - $PDAY | Community Meme Token on Solana</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --black: #0A0A1A;
+            --white: #FFFFFF;
+            --gray-1: #111126;
+            --gray-2: #1A1A33;
+            --gray-3: #252545;
+            --gray-5: #555577;
+            --gray-8: #8888AA;
+            --gray-d: #DDDDFF;
+            --gray-e: #EEEEFF;
+            --accent-green: #00FF88;
+            --accent-purple: #9D4EDD;
+            --accent-blue: #1A1A66;
+            --accent-glow-green: rgba(0, 255, 136, 0.5);
+            --accent-glow-purple: rgba(157, 78, 221, 0.5);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Space Background with Stars */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        /* Moon */
+        .moon {
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f5f5f5, #d0d0d0);
+            box-shadow: 0 0 40px 10px rgba(255, 255, 255, 0.1);
+            animation: float-moon 20s ease-in-out infinite;
+        }
+        
+        .moon::after {
+            content: "";
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.2);
+            box-shadow: 
+                30px 10px 0 -5px rgba(0, 0, 0, 0.2),
+                10px 40px 0 -3px rgba(0, 0, 0, 0.2),
+                40px 40px 0 -7px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes float-moon {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-20px, 10px) rotate(5deg); }
+            50% { transform: translate(10px, -15px) rotate(-5deg); }
+            75% { transform: translate(-15px, -5px) rotate(3deg); }
+        }
+        
+        /* Planets */
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: float-planet 25s infinite linear;
+        }
+        
+        .planet-1 {
+            width: 40px;
+            height: 40px;
+            top: 15%;
+            left: 5%;
+            background: radial-gradient(circle at 30% 30%, #ff6b6b, #c44569);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            animation-duration: 30s;
+        }
+        
+        .planet-2 {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 10%;
+            background: radial-gradient(circle at 30% 30%, #74b9ff, #0984e3);
+            box-shadow: 0 0 25px rgba(116, 185, 255, 0.5);
+            animation-duration: 40s;
+        }
+        
+        .planet-3 {
+            width: 30px;
+            height: 30px;
+            top: 60%;
+            right: 15%;
+            background: radial-gradient(circle at 30% 30%, #a29bfe, #6c5ce7);
+            box-shadow: 0 0 15px rgba(162, 155, 254, 0.5);
+            animation-duration: 35s;
+        }
+        
+        @keyframes float-planet {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 15px) rotate(90deg); }
+            50% { transform: translate(10px, 30px) rotate(180deg); }
+            75% { transform: translate(-10px, 15px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        /* Shooting Stars */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 10px 2px white;
+        }
+        
+        @keyframes shooting {
+            0% { 
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateX(300px) translateY(300px);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Scroll Animation Elements */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .scroll-animate.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scroll-animate-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .scroll-animate-left.animated {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .scroll-animate-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .scroll-animate-right.animated {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Header */
+        header {
+            background-color: rgba(10, 10, 26, 0.9);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid var(--gray-3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo img {
+            height: 50px;
+            width: auto;
+            border-radius: 12px;
+            transition: transform 0.3s;
+            background-color: var(--black);
+            padding: 5px;
+            box-shadow: 0 0 15px var(--accent-glow-purple);
+        }
+        
+        .logo:hover img {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--accent-glow-green);
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .ticker {
+            font-size: 22px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 800;
+            transition: all 0.3s;
+            box-shadow: 0 0 10px var(--accent-glow-purple);
+        }
+        
+        .ticker:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--accent-glow-green);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0,255,136,0.1) 0%, rgba(0,0,0,0) 40%),
+                radial-gradient(circle at 80% 70%, rgba(157,78,221,0.1) 0%, rgba(0,0,0,0) 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .hero h1 {
+            font-size: 62px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px var(--accent-glow-purple);
+            background: linear-gradient(to right, var(--white), var(--accent-green), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 22px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: var(--gray-d);
+            font-weight: 600;
+        }
+        
+        .highlight {
+            color: var(--accent-green);
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--accent-glow-green);
+        }
+        
+        .ca-section {
+            background-color: rgba(26, 26, 51, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 40px auto;
+            max-width: 800px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border: 1px solid var(--gray-3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .ca-section:hover {
+            box-shadow: 0 5px 25px var(--accent-glow-purple);
+            border-color: var(--accent-purple);
+        }
+        
+        .ca-label {
+            font-weight: 700;
+            color: var(--white);
+            font-size: 18px;
+        }
+        
+        .ca-address {
+            background-color: var(--gray-2);
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-3);
+            font-family: monospace;
+            flex-grow: 1;
+            min-width: 300px;
+            color: var(--white);
+            font-size: 16px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--accent-glow-green);
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--accent-glow-green);
+        }
+        
+        .buy-btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: var(--white);
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 800;
+            margin: 20px 0;
+            transition: all 0.4s;
+            box-shadow: 0 5px 25px var(--accent-glow-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .buy-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        
+        .buy-btn:hover::before {
+            left: 100%;
+        }
+        
+        .buy-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--accent-glow-green);
+        }
+        
+        /* Tokenomics Section */
+        .tokenomics {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .tokenomics::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(26, 26, 102, 0.7), rgba(10, 10, 26, 0.7));
+            z-index: -1;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+        }
+        
+        .tokenomics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .tokenomic-card {
+            background-color: rgba(26, 26, 51, 0.8);
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s;
+            border: 1px solid var(--gray-3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .tokenomic-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+        }
+        
+        .tokenomic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(157, 78, 221, 0.3);
+        }
+        
+        .tokenomic-icon {
+            font-size: 50px;
+            color: var(--accent-green);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--accent-glow-green);
+        }
+        
+        .tokenomic-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--white);
+        }
+        
+        .tokenomic-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--white);
+            text-shadow: 0 0 5px var(--accent-glow-purple);
+        }
+        
+        /* How to Buy Section */
+        .how-to-buy {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .how-to-buy::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 26, 0.7);
+            z-index: -1;
+        }
+        
+        .steps {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            background-color: rgba(26, 26, 51, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            border: 1px solid var(--gray-3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 40px rgba(157, 78, 221, 0.3);
+        }
+        
+        .step-number {
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 900;
+            margin-right: 25px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 15px var(--accent-glow-purple);
+        }
+        
+        .step-content h3 {
+            color: var(--white);
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .step-content p {
+            color: var(--gray-d);
+            font-size: 18px;
+        }
+        
+        /* Roadmap Section */
+        .roadmap {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .roadmap::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10, 10, 26, 0.7), rgba(26, 26, 102, 0.7));
+            z-index: -1;
+        }
+        
+        .roadmap-timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-green), var(--accent-purple));
+        }
+        
+        .roadmap-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 30px;
+            position: relative;
+            margin-bottom: 80px;
+            width: 50%;
+        }
+        
+        .roadmap-item:nth-child(even) {
+            align-self: flex-end;
+            justify-content: flex-start;
+            padding-left: 30px;
+            padding-right: 0;
+            left: 50%;
+        }
+        
+        .roadmap-item-content {
+            background-color: rgba(26, 26, 51, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--gray-3);
+            width: 100%;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .roadmap-item-content::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 30px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-glow-green);
+        }
+        
+        .roadmap-item:nth-child(even) .roadmap-item-content::before {
+            left: -10px;
+            right: auto;
+        }
+        
+        .roadmap-phase {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .roadmap-item ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .roadmap-item li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            color: var(--gray-d);
+        }
+        
+        .roadmap-item li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+        
+        /* FAQ Section */
+        .faq {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .faq::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 26, 0.7);
+            z-index: -1;
+        }
+        
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background-color: rgba(26, 26, 51, 0.8);
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--gray-3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .faq-question {
+            padding: 20px 30px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--white);
+            transition: all 0.3s;
+        }
+        
+        .faq-question:hover {
+            background-color: rgba(37, 37, 69, 0.5);
+        }
+        
+        .faq-answer {
+            padding: 0 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--gray-d);
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 20px 30px;
+            max-height: 500px;
+        }
+        
+        .faq-toggle {
+            font-size: 24px;
+            transition: transform 0.3s;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+        
+        /* Marketing Support Section */
+        .marketing-support {
+            padding: 100px 0;
+            position: relative;
+            text-align: center;
+        }
+        
+        .marketing-support::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10, 10, 26, 0.7), rgba(26, 26, 102, 0.7));
+            z-index: -1;
+        }
+        
+        .support-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(26, 26, 51, 0.8);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--gray-3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .support-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .support-text {
+            color: var(--gray-d);
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .support-wallet {
+            background-color: rgba(37, 37, 69, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border: 1px solid var(--gray-3);
+            max-width: 600px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .wallet-label {
+            font-weight: 700;
+            color: var(--white);
+            font-size: 18px;
+        }
+        
+        .wallet-address {
+            background-color: var(--gray-3);
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-5);
+            font-family: monospace;
+            flex-grow: 1;
+            min-width: 300px;
+            color: var(--white);
+            font-size: 16px;
+        }
+        
+        /* Social Media Buttons */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: var(--white);
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px var(--accent-glow-purple);
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--accent-glow-green);
+        }
+        
+        .social-icon {
+            font-size: 24px;
+        }
+        
+        .x-logo {
+            font-weight: 900;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* Disclaimer Section */
+        .disclaimer {
+            padding: 80px 0;
+            position: relative;
+            border-top: 1px solid var(--gray-3);
+            border-bottom: 1px solid var(--gray-3);
+        }
+        
+        .disclaimer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(10, 10, 26, 0.7), rgba(26, 26, 102, 0.7));
+            z-index: -1;
+        }
+        
+        .disclaimer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: rgba(26, 26, 51, 0.8);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-left: 5px solid var(--accent-purple);
+            backdrop-filter: blur(5px);
+        }
+        
+        .disclaimer h2 {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--white);
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .disclaimer-text {
+            color: var(--gray-d);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .disclaimer-text p {
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: rgba(26, 26, 102, 0.8);
+            padding: 60px 0 30px;
+            text-align: center;
+            border-top: 1px solid var(--gray-3);
+            position: relative;
+        }
+        
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 102, 0.8);
+            z-index: -1;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .footer-logo img {
+            height: 50px;
+            width: auto;
+            border-radius: 12px;
+            background-color: var(--black);
+            padding: 5px;
+            box-shadow: 0 0 15px var(--accent-glow-purple);
+        }
+        
+        .footer-text {
+            font-size: 28px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .community-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin: 40px 0 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .community-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--gray-2);
+            color: var(--white);
+            font-size: 28px;
+            transition: all 0.3s;
+            text-decoration: none;
+            border: 1px solid var(--gray-3);
+        }
+        
+        .social-link.x-logo {
+            font-weight: 900;
+            font-family: Arial, sans-serif;
+        }
+        
+        .social-link:hover {
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: var(--white);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--accent-glow-green);
+        }
+        
+        .copyright {
+            margin-top: 40px;
+            color: var(--gray-8);
+            font-size: 16px;
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        /* Popup Notification */
+        .popup {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: var(--white);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            font-weight: 600;
+            transform: translateX(150%);
+            transition: transform 0.4s ease;
+        }
+        
+        .popup.show {
+            transform: translateX(0);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hero {
+                padding: 150px 0 80px;
+            }
+            
+            .hero h1 {
+                font-size: 42px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .tokenomics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .ca-section, .support-wallet {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .ca-address, .wallet-address {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .social-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .social-btn {
+                width: 250px;
+            }
+            
+            .roadmap-timeline::before {
+                left: 30px;
+            }
+            
+            .roadmap-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+            
+            .roadmap-item:nth-child(even) {
+                left: 0;
+                padding-left: 70px;
+            }
+            
+            .roadmap-item-content::before {
+                left: -40px;
+                right: auto;
+            }
+            
+            .roadmap-item:nth-child(even) .roadmap-item-content::before {
+                left: -40px;
+            }
+            
+            .moon, .planet {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background">
+        <div class="stars" id="stars"></div>
+        <div class="moon"></div>
+        <div class="planet planet-1"></div>
+        <div class="planet planet-2"></div>
+        <div class="planet planet-3"></div>
+    </div>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="https://i.ibb.co/8nVbtQwL/PUMDAY-LOGO.png" alt="PUMPDAY Logo">
+                    <div class="logo-text">PUMPDAY</div>
+                </div>
+                <div class="ticker">$PDAY</div>
+            </div>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h1 class="scroll-animate">The Wednesday <span class="highlight">PUMP</span> Meme Coin on Solana</h1>
+            <p class="scroll-animate">Join the community-driven movement that brings excitement to every Wednesday. <span class="highlight">PUMPDAY</span> is more than just a meme token - it's a weekly celebration on the Solana blockchain!</p>
+            
+            <div class="ca-section floating scroll-animate">
+                <div class="ca-label">CONTRACT ADDRESS:</div>
+                <div class="ca-address" id="contractAddress">Contract address will be after lunch Here are</div>
+                <button class="copy-btn" id="copyButton">
+                    <i class="fas fa-copy"></i> COPY
+                </button>
+            </div>
+            
+            <a href="" class="buy-btn scroll-animate" target="_blank">
+                <i class="fas fa-bolt"></i> Not yet launched
+            </a>
+            
+            <p style="margin-top: 30px; font-size: 18px; color: var(--gray-8);" class="scroll-animate">
+                <i class="fas fa-calendar-alt"></i> Every Wednesday is Pump Day! Don't miss the fun.
+            </p>
+        </div>
+    </section>
+    
+    <section class="tokenomics">
+        <div class="container">
+            <h2 class="section-title scroll-animate">TOKENOMICS</h2>
+            <div class="tokenomics-grid">
+                <div class="tokenomic-card scroll-animate-left">
+                    <div class="tokenomic-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="tokenomic-title">MAX SUPPLY</div>
+                    <div class="tokenomic-value">1.000.000.000 Token</div>
+                    <p style="margin-top: 15px; color: var(--gray-d);">Plenty for the whole community</p>
+                </div>
+                
+                <div class="tokenomic-card scroll-animate">
+                    <div class="tokenomic-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <div class="tokenomic-title">NO FEES</div>
+                    <div class="tokenomic-value">0% Tax</div>
+                    <p style="margin-top: 15px; color: var(--gray-d);">Keep 100% of your investment</p>
+                </div>
+                
+                <div class="tokenomic-card scroll-animate-right">
+                    <div class="tokenomic-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="tokenomic-title">LIQUIDITY</div>
+                    <div class="tokenomic-value">100% Locked</div>
+                    <p style="margin-top: 15px; color: var(--gray-d);">Completely secure and rug-proof 🚀</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="how-to-buy">
+        <div class="container">
+            <h2 class="section-title scroll-animate">How To Buy $PDAY</h2>
+            <div class="steps">
+                <div class="step scroll-animate-left">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Download Phantom Wallet</h3>
+                        <p>Get the Phantom wallet browser extension or mobile app from the official website. The safest way to store your $PDAY.</p>
+                        <a href="https://phantom.com/" class="download-btn" target="_blank">
+                            <i class="fas fa-download"></i> Download Phantom Wallet
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="step scroll-animate-right">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Get Some $SOLANA</h3>
+                        <p>Purchase SOL from an exchange and transfer it to your Phantom wallet. This will be used to buy $PDAY.</p>
+                    </div>
+                </div>
+                
+                <div class="step scroll-animate-left">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Search PUMPDAY or the Contract Address</h3>
+                        <p>Go to Pump.fun and search for "PUMPDAY" or paste the contract address directly to find the token.</p>
+                    </div>
+                </div>
+                
+                <div class="step scroll-animate-right">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Buy Some $PDAY</h3>
+                        <p>Connect your wallet, enter the amount you want to buy, and confirm the transaction. Welcome to the PUMPDAY community!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="roadmap">
+        <div class="container">
+            <h2 class="section-title scroll-animate">ROADMAP</h2>
+            <div class="roadmap-timeline">
+                <div class="roadmap-item scroll-animate-left">
+                    <div class="roadmap-item-content">
+                        <h3 class="roadmap-phase">Phase 1: Launch & Community Building</h3>
+                        <ul>
+                            <li>Build first $PDAY holders on X & Telegram</li>
+                            <li>Fair launch on Pump.fun.</li>
+                            <li>$100K market cap.</li>
+                            <li>Goal 1,000 holders milestone</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item scroll-animate-right">
+                    <div class="roadmap-item-content">
+                        <h3 class="roadmap-phase">Phase 2: Growth & Engagement</h3>
+                        <ul>
+                            <li>Collaborations</li>
+                            <li>Partnerships with other Solana projects</li>
+                            <li>First CEX listing application</li>
+                            <li>Weekly Pump Day events</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item scroll-animate-left">
+                    <div class="roadmap-item-content">
+                        <h3 class="roadmap-phase">Phase 3: Expansion & Utilities</h3>
+                        <ul>
+                            <li>Limited NFT collection for early supporters</li>
+                            <li>10,000 holders milestone</li>
+                            <li>Merchandise store</li>
+                            <li>Major exchange listings</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item scroll-animate-right">
+                    <div class="roadmap-item-content">
+                        <h3 class="roadmap-phase">Phase 4: Ecosystem Development</h3>
+                        <ul>
+                            <li>$100M market cap.</li>
+                            <li>Community governance implementation</li>
+                            <li>Charity initiatives</li>
+                            <li>Cross-chain expansion</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title scroll-animate">FREQUENTLY ASKED QUESTIONS</h2>
+            <div class="faq-container">
+                <div class="faq-item scroll-animate">
+                    <div class="faq-question">
+                        What is PUMPDAY?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        PUMPDAY is a community-driven meme token on the Solana blockchain that celebrates the weekly pump every Wednesday. It's designed for entertainment and community engagement.
+                    </div>
+                </div>
+                <div class="faq-item scroll-animate">
+                    <div class="faq-question">
+                        How can I buy PUMPDAY?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        You can buy PUMPDAY on Pump.fun using the contract address provided on this website. Make sure you have a Solana wallet like Phantom and some SOL to complete the transaction.
+                    </div>
+                </div>
+                <div class="faq-item scroll-animate">
+                    <div class="faq-question">
+                        Is there a tax on transactions?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        No, PUMPDAY has a 0% tax on all transactions. You keep 100% of your investment when buying or selling.
+                    </div>
+                </div>
+                <div class="faq-item scroll-animate">
+                    <div class="faq-question">
+                        Is the liquidity locked?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, 100% of the liquidity is locked, making the project completely secure and rug-proof.
+                    </div>
+                </div>
+                <div class="faq-item scroll-animate">
+                    <div class="faq-question">
+                        What is the total supply?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        The total supply of PUMPDAY is 1.000.000.000 tokens.
+                    </div>
+                </div>
+                <div class="faq-item scroll-animate">
+                    <div class="faq-question">
+                        How can I join the community?
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        You can join our community on X (Twitter) and Telegram using the links provided in the footer of this website.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="marketing-support">
+        <div class="container">
+            <div class="support-content scroll-animate">
+                <h2 class="support-title">Support Marketing</h2>
+                <p class="support-text">
+                    Help us grow the PUMPDAY community! Your donations support marketing efforts, 
+                    community events, and development of the project. Every contribution helps us reach more people.
+                </p>
+                
+                <div class="support-wallet floating">
+                    <div class="wallet-label">SOLANA WALLET:</div>
+                    <div class="wallet-address" id="marketingWallet">DAVAQA1mjnnoUCsSeMnrZZuBfRezDZqNUo9SP2uhpEao</div>
+                    <button class="copy-btn" id="copyMarketingButton">
+                        <i class="fas fa-copy"></i> COPY
+                    </button>
+                </div>
+                
+                <p class="support-text">
+                    Send $SOL to this address to support our marketing efforts. Thank you for helping grow the PUMPDAY community!
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="disclaimer">
+        <div class="container">
+            <div class="disclaimer-content scroll-animate">
+                <h2><i class="fas fa-exclamation-triangle"></i> IMPORTANT DISCLAIMER</h2>
+                <div class="disclaimer-text">
+                    <p><strong>Pumpday ($PDAY)</strong> is a community-driven meme token created for entertainment and social engagement on the Solana blockchain.</p>
+                    
+                    <p><strong>No financial advice:</strong> Nothing on this website, our social media channels, or any other Pumpday communication should be considered investment advice or a recommendation to buy, sell, or hold any cryptocurrency or digital asset. Always do your own research (DYOR).</p>
+                    
+                    <p><strong>No guarantees:</strong> Pumpday has no intrinsic value, is not backed by any company, and does not represent equity, rights, or ownership of any kind. The token price is entirely market-driven and can fluctuate significantly.</p>
+                    
+                    <p><strong>Risks:</strong> Cryptocurrency trading involves significant risk and may result in the loss of your capital. You should not invest funds you cannot afford to lose.</p>
+                    
+                    <p><strong>Responsibility:</strong> The Pumpday team does not guarantee the project's future development, price, or liquidity. Use the token and participate at your own risk.</p>
+                    
+                    <p>By accessing this website or participating in the Pumpday community, you acknowledge and accept these terms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-logo scroll-animate">
+                <img src="https://i.ibb.co/8nVbtQwL/PUMDAY-LOGO.png" alt="PUMPDAY Logo">
+                <div class="footer-text">PUMPDAY</div>
+            </div>
+            <p style="max-width: 600px; margin: 0 auto; color: var(--gray-d); font-size: 18px;" class="scroll-animate">
+                The Wednesday celebration meme coin on Solana. Join the weekly pump!
+            </p>
+            
+            <h3 class="community-title scroll-animate">JOIN COMMUNITY</h3>
+            
+            <!-- Social Media Buttons -->
+            <div class="social-buttons">
+    <a href="https://x.com/PumpdayCoin" class="social-btn" target="_blank">
+        <span class="x-logo">𝕏</span> Follow on X
+    </a>
+    <a href="https://t.me/PumpdayHQ" class="social-btn" target="_blank">
+        <i class="fab fa-telegram social-icon"></i> Join Telegram
+    </a>
+</div>
+            
+            <div class="copyright">
+                &copy; 2025 PUMPDAY ($PDAY). All rights reserved. This is a meme coin for entertainment purposes only. Not financial advice.
+            </div>
+        </div>
+    </footer>
+    
+    <div class="popup" id="popup">
+        Contract address copied to clipboard! 🎉
+    </div>
+
+    <div class="popup" id="marketingPopup">
+        Marketing wallet address copied to clipboard! 🎉
+    </div>
+    
+    <script>
+        // Create stars for the background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 2 + 1;
+                
+                // Random animation delay
+                const delay = Math.random() * 5;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // Create shooting stars occasionally
+            setInterval(createShootingStar, 3000);
+        }
+        
+        function createShootingStar() {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
+            
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 30;
+            
+            shootingStar.style.left = `${startX}%`;
+            shootingStar.style.top = `${startY}%`;
+            
+            document.querySelector('.space-background').appendChild(shootingStar);
+            
+            shootingStar.style.animation = `shooting ${Math.random() * 2 + 1}s linear`;
+            
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 3000);
+        }
+        
+        // Contract Address Copy Functionality with Popup and Confetti
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const contractAddress = document.getElementById('contractAddress');
+            const textArea = document.createElement('textarea');
+            textArea.value = contractAddress.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show popup notification
+            const popup = document.getElementById('popup');
+            popup.classList.add('show');
+            
+            // Trigger confetti effect with PUMPDAY colors
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#00FF88', '#9D4EDD', '#1A1A66', '#FFFFFF']
+            });
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        });
+
+        // Marketing Wallet Address Copy Functionality with Popup and Confetti
+        document.getElementById('copyMarketingButton').addEventListener('click', function() {
+            const marketingWallet = document.getElementById('marketingWallet');
+            const textArea = document.createElement('textarea');
+            textArea.value = marketingWallet.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // Show popup notification
+            const popup = document.getElementById('marketingPopup');
+            popup.classList.add('show');
+            
+            // Trigger confetti effect with PUMPDAY colors
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#00FF88', '#9D4EDD', '#1A1A66', '#FFFFFF']
+            });
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        });
+        
+        // FAQ Toggle Functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+            });
+        });
+        
+        // Scroll Animation Implementation
+        function checkScroll() {
+            const elements = document.querySelectorAll('.scroll-animate, .scroll-animate-left, .scroll-animate-right');
+            const windowHeight = window.innerHeight;
+            const triggerPoint = windowHeight * 0.85;
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                
+                if (elementTop < triggerPoint) {
+                    element.classList.add('animated');
+                }
+            });
+        }
+        
+        // Initial check when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            checkScroll();
+            
+            // Add floating animation to multiple elements
+            const elements = document.querySelectorAll('.tokenomic-card, .step');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+        
+        // Check on scroll
+        window.addEventListener('scroll', checkScroll);
+        
+        // Replace with actual contract address
+        // document.getElementById('contractAddress').textContent = "YOUR_ACTUAL_CONTRACT_ADDRESS_HERE";
+    </script>
+</body>
+</html>
